@@ -18,7 +18,7 @@ Kubernetes, also known as K8s, is an open source system for automating deploymen
 
 <div id="set-up-dev-env"/>
 
-## 2. Set up devlopment envrionment
+## 2. Set up devlopment environment
 
 - Install Docker (typically include `kubectl`): https://docs.docker.com/desktop/setup/install/mac-install/
 
