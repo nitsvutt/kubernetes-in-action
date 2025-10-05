@@ -93,12 +93,10 @@ kubectl apply -f ./spark/spark-operator-controller-rbac.yml
 kubectl apply -f ./spark/spark-submit-rbac.yml
 ```
 
-- Run a spark application using `kubectl apply`:
+- Run a spark application using `kubectl apply` or `spark-submit`:
 ```
 kubectl apply -f ./spark/spark-pi.yml
 ```
-
-- Run a spark application using `spark-submit`:
 ```
 ...
 ```
