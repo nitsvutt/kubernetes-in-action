@@ -67,16 +67,26 @@ helm install spark-operator spark-operator/spark-operator \
     --wait
 ```
 
-<!-- - Install `spark-history-server` chart:
+<!-- - Inspect `spark-operator` values if needed:
+```
+helm get values spark-operator -n spark --all
+``` -->
+
+- Install `spark-history-server` chart:
 ```
 helm install spark-history-server stable/spark-history-server \
     --namespace spark \
     --set service.type=NodePort \
     --set service.nodePort=30080 \
-    --set persistence.enabled=true \
-    --set persistence.existingClaim=spark-event-pvc \
-    --set logDirectory=/tmp/spark/event \
+    --set nfs.enableExampleNFS=false \
+    --set pvc.enablePVC=true \
+    --set pvc.existingClaimName=spark-event-pvc \
     --wait
+```
+
+<!-- - Inspect `spark-history-server` values if needed:
+```
+helm get values spark-history-server -n spark --all
 ``` -->
 
 - Create `spark-operator-controller` RBAC:
