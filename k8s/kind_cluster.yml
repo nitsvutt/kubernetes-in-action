@@ -6,9 +6,25 @@ networking:
 nodes:
 - role: control-plane
   image: kindest/node:v1.34.0
+  extraPortMappings:
+    - containerPort: 38080
+      hostPort: 18080
+      protocol: TCP
+    - containerPort: 30040
+      hostPort: 4040
+      protocol: TCP
 - role: worker
   image: kindest/node:v1.34.0
+  extraMounts:
+    - hostPath: ${PROJECT_PATH}/common/spark/event
+      containerPath: /tmp/spark/event
 - role: worker
   image: kindest/node:v1.34.0
+  extraMounts:
+    - hostPath: ${PROJECT_PATH}/common/spark/event
+      containerPath: /tmp/spark/event
 - role: worker
   image: kindest/node:v1.34.0
+  extraMounts:
+    - hostPath: ${PROJECT_PATH}/common/spark/event
+      containerPath: /tmp/spark/event

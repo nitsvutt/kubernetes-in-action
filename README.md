@@ -7,6 +7,7 @@
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Set up devlopment environment](#set-up-dev-env)
+3. [Spark on Kubernetes](#spark-on-k8s)
 
 
 <div id="introduction"/>
@@ -27,9 +28,78 @@ Kubernetes, also known as K8s, is an open source system for automating deploymen
 
 - Create a K8s cluster:
 ```
-kind create cluster --config ./k8s/kind_cluster.yml
+envsubst < ./k8s/kind_cluster.yml | kind create cluster --config -
 ```
+
 - Check `cluster-info`:
 ```
 kubectl cluster-info --context kind-my-cluster
+```
+
+<div id="spark-on-k8s"/>
+
+## 3. Spark on Kubernetes
+
+- Create `spark` namespace:
+```
+kubectl create namespace spark
+```
+
+- Create `spark-event-pv` and `spark-event-pvc`:
+```
+kubectl apply -f ./spark/spark-event-volume.yml
+```
+
+- Add repositories:
+```
+helm repo add --force-update spark-operator https://kubeflow.github.io/spark-operator
+```
+```
+helm repo add --force-update stable https://charts.helm.sh/stable
+```
+
+- Install `spark-operator` chart:
+```
+helm install spark-operator spark-operator/spark-operator \
+    --namespace spark \
+    --set spark.jobNamespaces={spark} \
+    --set webhook.enable=true \
+    --wait
+```
+
+<!-- - Install `spark-history-server` chart:
+```
+helm install spark-history-server stable/spark-history-server \
+    --namespace spark \
+    --set service.type=NodePort \
+    --set service.nodePort=30080 \
+    --set persistence.enabled=true \
+    --set persistence.existingClaim=spark-event-pvc \
+    --set logDirectory=/tmp/spark/event \
+    --wait
+``` -->
+
+- Create `spark-operator-controller` RBAC:
+```
+kubectl apply -f ./spark/spark-operator-controller-rbac.yml
+```
+
+- Create `spark-submit` RBAC:
+```
+kubectl apply -f ./spark/spark-submit-rbac.yml
+```
+
+- Run a spark application using `kubectl apply`:
+```
+kubectl apply -f ./spark/spark-pi.yml
+```
+
+- Run a spark application using `spark-submit`:
+```
+...
+```
+
+- Check `sparkapp`:
+```
+kubectl describe sparkapp spark-pi -n spark
 ```
