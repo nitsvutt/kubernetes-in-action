@@ -50,7 +50,7 @@ kubectl create namespace spark
 kubectl apply -f ./spark/spark-event-volume.yml
 ```
 
-- Add repositories:
+- Add repositories for `spark-operator` and `spark-history-server`:
 ```
 helm repo add --force-update spark-operator https://kubeflow.github.io/spark-operator
 ```
