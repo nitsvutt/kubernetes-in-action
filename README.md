@@ -14,7 +14,7 @@
 
 ## 1. Introduction
 
-Kubernetes, also known as K8s, is an open source system for automating deployment, scaling, and management of containerized applications. Nowadays, many data systems are build on top of K8s as a robust container orchestration and resource management at scale.
+Kubernetes, also known as K8s, is an open source system for automating deployment, scaling, and management of containerized applications. Nowadays, many data systems leverage K8s as a robust container orchestration and resource management at scale.
 
 <div id="set-up-dev-env"/>
 
