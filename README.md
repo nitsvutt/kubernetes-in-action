@@ -58,7 +58,7 @@ helm repo add --force-update spark-operator https://kubeflow.github.io/spark-ope
 helm repo add --force-update stable https://charts.helm.sh/stable
 ```
 
-- Install `spark-operator` chart:
+- Install `spark-operator` and `spark-history-server` charts:
 ```
 helm install spark-operator spark-operator/spark-operator \
     --namespace spark \
@@ -66,13 +66,10 @@ helm install spark-operator spark-operator/spark-operator \
     --set webhook.enable=true \
     --wait
 ```
-
 <!-- - Inspect `spark-operator` values if needed:
 ```
 helm get values spark-operator -n spark --all
 ``` -->
-
-- Install `spark-history-server` chart:
 ```
 helm install spark-history-server stable/spark-history-server \
     --namespace spark \
@@ -83,18 +80,15 @@ helm install spark-history-server stable/spark-history-server \
     --set pvc.existingClaimName=spark-event-pvc \
     --wait
 ```
-
 <!-- - Inspect `spark-history-server` values if needed:
 ```
 helm get values spark-history-server -n spark --all
 ``` -->
 
-- Create `spark-operator-controller` RBAC:
+- Configure `spark-operator-controller` and `spark-submit` RBACs:
 ```
 kubectl apply -f ./spark/spark-operator-controller-rbac.yml
 ```
-
-- Create `spark-submit` RBAC:
 ```
 kubectl apply -f ./spark/spark-submit-rbac.yml
 ```
@@ -109,7 +103,7 @@ kubectl apply -f ./spark/spark-pi.yml
 ...
 ```
 
-- Check `sparkapp`:
+- Check `spark-pi` application:
 ```
 kubectl describe sparkapp spark-pi -n spark
 ```
