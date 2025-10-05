@@ -105,3 +105,13 @@ kubectl apply -f ./spark/spark-pi.yml
 ```
 kubectl describe sparkapp spark-pi -n spark
 ```
+
+- Check Spark UI at `http://localhost:4045/`:
+<p align="center">
+    <img src="https://github.com/nitsvutt/kubernetes-in-action/blob/main/assets/spark-ui.png" title="Spark UI" alt="spark-ui" width=600/>
+</p>
+
+- Check Spark History Server UI at `http://localhost:18080/`:
+<p align="center">
+    <img src="https://github.com/nitsvutt/kubernetes-in-action/blob/main/assets/spark-history-server-ui.png" title="Spark History Server UI" alt="spark-history-server-ui" width=600/>
+</p>

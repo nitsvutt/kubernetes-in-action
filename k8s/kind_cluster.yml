@@ -10,8 +10,8 @@ nodes:
     - containerPort: 30080
       hostPort: 18080
       protocol: TCP
-    - containerPort: 30040
-      hostPort: 4040
+    - containerPort: 30045
+      hostPort: 4045
       protocol: TCP
 - role: worker
   image: kindest/node:v1.34.0
