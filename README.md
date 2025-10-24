@@ -8,7 +8,7 @@
 1. [Introduction](#introduction)
 2. [Set up devlopment environment](#set-up-dev-env)
 3. [Spark on Kubernetes](#spark-on-k8s)
-
+3. [ScyllaDB on Kubernetes](#scylladb-on-k8s)
 
 <div id="introduction"/>
 
@@ -112,3 +112,47 @@ kubectl describe sparkapp spark-pi -n spark
 <p align="center">
     <img src="https://github.com/nitsvutt/kubernetes-in-action/blob/main/asset/spark-history-server-ui.png" title="Spark History Server UI" alt="spark-history-server-ui" width=100%/>
 </p>
+
+<div id="scylladb-on-k8s"/>
+
+## 4. ScyllaDB on K8s
+
+- Create `scylla` namespace:
+```
+kubectl create namespace scylla
+```
+
+- Create persistent volume:
+```
+kubectl apply -f $PROJECT_PATH/kubernetes-in-action/scylladb/scylla-persistent-volume.yml
+```
+
+- Create service:
+```
+kubectl apply -f $PROJECT_PATH/kubernetes-in-action/scylladb/scylla-service.yml
+```
+
+- Create config map:
+```
+kubectl apply -f $PROJECT_PATH/kubernetes-in-action/scylladb/scylla-configmap.yml
+```
+
+- Create Scylla and Scylla Manager statefulset:
+```
+kubectl apply -f $PROJECT_PATH/kubernetes-in-action/scylladb/scylla-statefulset.yml
+```
+
+- Check Scylla Cluster:
+```
+kubectl exec -it scylla-0 -n scylla -- \
+    nodetool status
+```
+
+- Add Scylla Cluster for Scylla Manager:
+```
+kubectl exec -it scylla-manager-0 -c scylla-manager -n scylla -- \
+    sctool cluster add \
+    --host scylla-0.scylla-clusterip.scylla.svc.cluster.local \
+    --name my-cluster \
+    --auth-token $SCYLLADB_AUTH_TOKEN
+```
