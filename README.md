@@ -36,6 +36,12 @@ envsubst < ./k8s/kind_cluster.yml | kind create cluster --config -
 kubectl cluster-info --context kind-my-cluster
 ```
 
+- Connect to pre-exsisting network:
+```
+docker network connect lakehouse_platform my-cluster-control-plane
+docker network connect lakehouse_platform my-cluster-worker
+```
+
 <div id="spark-on-k8s"/>
 
 ## 3. Spark on Kubernetes

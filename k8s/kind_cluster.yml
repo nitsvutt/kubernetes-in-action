@@ -16,5 +16,7 @@ nodes:
 - role: worker
   image: kindest/node:v1.34.0
   extraMounts:
-    - hostPath: ${PROJECT_PATH}/common/spark/event
+    - hostPath: ${COMMON_PATH}/spark/event
       containerPath: /tmp/spark/event
+    - hostPath: ${COMMON_PATH}/k8s/scylladb
+      containerPath: /scylladb
