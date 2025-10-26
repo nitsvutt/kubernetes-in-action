@@ -28,7 +28,7 @@ Kubernetes, also known as K8s, is an open source system for automating deploymen
 
 - Create a K8s cluster:
 ```
-envsubst < ./k8s/kind_cluster.yml | kind create cluster --config -
+envsubst < $PROJECT_PATH/kubernetes-in-action/k8s/kind_cluster.yml | kind create cluster --config -
 ```
 
 - Check `cluster-info`:
