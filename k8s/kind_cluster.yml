@@ -13,12 +13,13 @@ nodes:
     - containerPort: 30045
       hostPort: 4045
       protocol: TCP
-    - containerPort: 30700
-      hostPort: 7000
-      protocol: TCP
-    - containerPort: 30701
-      hostPort: 7001
-      protocol: TCP
+- role: worker
+  image: kindest/node:v1.34.0
+  extraMounts:
+    - hostPath: ${COMMON_PATH}/spark/event
+      containerPath: /tmp/spark/event
+    - hostPath: ${COMMON_PATH}/k8s/scylladb
+      containerPath: /scylladb
 - role: worker
   image: kindest/node:v1.34.0
   extraMounts:

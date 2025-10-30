@@ -43,14 +43,19 @@ spec:
             name: agent
             protocol: TCP
         env:
-          - name: SEEDS
-            value: scylla-0.scylla-clusterip.scylla.svc.cluster.local
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
         command:
           - bash
           - '-c'
           - >
             ./docker-entrypoint.py \
-              --seeds ${SEEDS} \
+              --seeds scylla-0.scylla-clusterip.scylla.svc.cluster.local \
+              --broadcast-rpc-address ${POD_NAME}.scylla-clusterip.scylla.svc.cluster.local \
+              --broadcast-address ${POD_NAME}.scylla-clusterip.scylla.svc.cluster.local \
               --smp 2 --memory 2G
         volumeMounts:
           - name: scylla-pv

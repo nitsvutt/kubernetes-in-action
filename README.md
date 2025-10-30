@@ -40,6 +40,7 @@ kubectl cluster-info --context kind-my-cluster
 ```
 docker network connect lakehouse_platform my-cluster-control-plane
 docker network connect lakehouse_platform my-cluster-worker
+docker network connect lakehouse_platform my-cluster-worker2
 ```
 
 <div id="spark-on-k8s"/>
