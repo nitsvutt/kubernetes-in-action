@@ -53,16 +53,25 @@ spec:
           - '-c'
           - >
             ./docker-entrypoint.py \
-              --seeds scylla-0.scylla-clusterip.scylla.svc.cluster.local \
+              --seeds scylla-0.scylla-clusterip.scylla.svc.cluster.local,scylla-1.scylla-clusterip.scylla.svc.cluster.local \
               --broadcast-rpc-address ${POD_NAME}.scylla-clusterip.scylla.svc.cluster.local \
               --broadcast-address ${POD_NAME}.scylla-clusterip.scylla.svc.cluster.local \
-              --smp 2 --memory 2G
+              --smp 1 --memory 1G
         volumeMounts:
           - name: scylla-pv
             mountPath: /var/lib/scylla
           - name: scylla-config
+            mountPath: /etc/scylla/cassandra-rackdc.properties
+            subPath: cassandra-rackdc.properties
+          - name: scylla-config
             mountPath: /etc/scylla/scylla.yaml
             subPath: scylla.yaml
+          - name: scylla-config
+            mountPath: /etc/supervisord.conf.d/scylla-manager-agent.conf
+            subPath: scylla-manager-agent.conf
+          - name: scylla-config
+            mountPath: /etc/scylla-manager-agent/scylla-manager-agent.yaml
+            subPath: scylla-manager-agent.yaml
       volumes:
         - name: scylla-config
           configMap:

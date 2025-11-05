@@ -141,7 +141,7 @@ kubectl apply -f $PROJECT_PATH/kubernetes-in-action/scylladb/scylla-service.yml
 
 - Create config map:
 ```
-kubectl apply -f $PROJECT_PATH/kubernetes-in-action/scylladb/scylla-configmap.yml
+envsubst < $PROJECT_PATH/kubernetes-in-action/scylladb/scylla-configmap.yml | kubectl apply -f -
 ```
 
 - Create Scylla and Scylla Manager statefulset:
