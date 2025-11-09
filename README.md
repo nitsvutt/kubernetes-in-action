@@ -40,7 +40,6 @@ kubectl cluster-info --context kind-my-cluster
 ```
 docker network connect lakehouse_platform my-cluster-control-plane
 docker network connect lakehouse_platform my-cluster-worker
-docker network connect lakehouse_platform my-cluster-worker2
 ```
 
 <div id="spark-on-k8s"/>
@@ -109,11 +108,6 @@ kubectl apply -f ./spark/spark-pi.yml
 ```
 kubectl describe sparkapp spark-pi -n spark
 ```
-
-- Check Spark UI at `http://localhost:4045/`:
-<p align="center">
-    <img src="https://github.com/nitsvutt/kubernetes-in-action/blob/main/asset/spark-ui.png" title="Spark UI" alt="spark-ui" width=100%/>
-</p>
 
 - Check Spark History Server UI at `http://localhost:18080/`:
 <p align="center">

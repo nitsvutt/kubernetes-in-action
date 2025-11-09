@@ -12,9 +12,8 @@ spec:
   mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
   sparkVersion: 3.5.0
   sparkConf:
-    spark.ui.port: "4045" # in case managing the sparkapp at runtime is needed
     spark.eventLog.enabled: "true"
-    spark.eventLog.dir: "file:///tmp/spark/event"
+    spark.eventLog.dir: "file:///spark/event"
   volumes:
     - name: spark-event
       persistentVolumeClaim:
@@ -29,7 +28,7 @@ spec:
       version: 3.5.0
     volumeMounts:
       - name: spark-event
-        mountPath: "/tmp/spark/event"
+        mountPath: "/spark/event"
   executor:
     instances: 1
     cores: 1
@@ -38,20 +37,4 @@ spec:
       version: 3.5.0
     volumeMounts:
       - name: spark-event
-        mountPath: "/tmp/spark/event"
----
-# in case managing the sparkapp at runtime is needed
-apiVersion: v1
-kind: Service
-metadata:
-  name: spark-pi-ui-nodeport
-  namespace: spark
-spec:
-  type: NodePort
-  selector:
-    sparkoperator.k8s.io/app-name: spark-pi
-    spark-role: driver
-  ports:
-    - port: 4045
-      targetPort: 4045
-      nodePort: 30045
+        mountPath: "/spark/event"

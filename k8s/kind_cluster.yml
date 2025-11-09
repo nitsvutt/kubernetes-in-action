@@ -10,20 +10,10 @@ nodes:
     - containerPort: 30080
       hostPort: 18080
       protocol: TCP
-    - containerPort: 30045
-      hostPort: 4045
-      protocol: TCP
 - role: worker
   image: kindest/node:v1.34.0
   extraMounts:
-    - hostPath: ${COMMON_PATH}/spark/event
-      containerPath: /tmp/spark/event
-    - hostPath: ${COMMON_PATH}/k8s/scylladb
-      containerPath: /scylladb
-- role: worker
-  image: kindest/node:v1.34.0
-  extraMounts:
-    - hostPath: ${COMMON_PATH}/spark/event
-      containerPath: /tmp/spark/event
+    - hostPath: ${COMMON_PATH}/k8s/spark
+      containerPath: /spark
     - hostPath: ${COMMON_PATH}/k8s/scylladb
       containerPath: /scylladb
