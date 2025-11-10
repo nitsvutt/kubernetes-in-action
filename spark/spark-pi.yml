@@ -9,6 +9,7 @@ spec:
   mode: cluster
   image: docker.io/library/spark:3.5.0
   imagePullPolicy: IfNotPresent
+  timeToLiveSeconds: 604800
   mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
   sparkVersion: 3.5.0
   sparkConf:
