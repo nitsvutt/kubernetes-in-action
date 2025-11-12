@@ -1,9 +1,5 @@
 # Kubernetes in Action
 
-![license](https://img.shields.io/github/license/nitsvutt/kubernetes-in-action)
-![stars](https://img.shields.io/github/stars/nitsvutt/kubernetes-in-action)
-![forks](https://img.shields.io/github/forks/nitsvutt/kubernetes-in-action)
-
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Set up devlopment environment](#set-up-dev-env)
