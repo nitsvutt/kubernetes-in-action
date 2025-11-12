@@ -26,6 +26,11 @@ Kubernetes, also known as K8s, is an open source system for automating deploymen
 
 - Install Helm: https://helm.sh/docs/intro/install/
 
+- Source `.env.secret` (configured from `.env.template`) file:
+```
+source .env.secret
+```
+
 - Create a K8s cluster:
 ```
 envsubst < $PROJECT_PATH/kubernetes-in-action/k8s/kind_cluster.yml | kind create cluster --config -
@@ -53,7 +58,7 @@ kubectl create namespace spark
 
 - Create `spark-event-pv` and `spark-event-pvc`:
 ```
-kubectl apply -f ./spark/spark-event-volume.yml
+kubectl apply -f $PROJECT_PATH/kubernetes-in-action/spark/spark-event-volume.yml
 ```
 
 - Add repositories for `spark-operator` and `spark-history-server`:
@@ -67,13 +72,11 @@ helm repo add --force-update stable https://charts.helm.sh/stable
 - Install `spark-operator` and `spark-history-server` charts:
 ```
 helm install spark-operator spark-operator/spark-operator \
+    -f $PROJECT_PATH/kubernetes-in-action/charts/spark-operator/values.yaml \
     --namespace spark \
-    --set spark.jobNamespaces={spark} \
-    --set webhook.enable=true \
     --wait
 ```
-<!-- - Inspect `spark-operator` values if needed:
-```
+<!-- ```
 helm get values spark-operator -n spark --all
 ``` -->
 ```
@@ -86,22 +89,13 @@ helm install spark-history-server stable/spark-history-server \
     --set pvc.existingClaimName=spark-event-pvc \
     --wait
 ```
-<!-- - Inspect `spark-history-server` values if needed:
-```
+<!-- ```
 helm get values spark-history-server -n spark --all
 ``` -->
 
-- Configure `spark-operator-controller` and `spark-submit` RBACs:
-```
-kubectl apply -f ./spark/spark-operator-controller-rbac.yml
-```
-```
-kubectl apply -f ./spark/spark-submit-rbac.yml
-```
-
 - Run a spark application:
 ```
-kubectl apply -f ./spark/spark-pi.yml
+kubectl apply -f $PROJECT_PATH/kubernetes-in-action/spark/spark-pi.yml
 ```
 
 - Check `spark-pi` application:

@@ -1,0 +1,187 @@
+nameOverride: ""
+fullnameOverride: "spark"
+commonLabels: {}
+
+image:
+  registry: ghcr.io
+  repository: kubeflow/spark-operator/controller
+  tag: ""
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+hook:
+  upgradeCrd: false
+  image:
+    registry: ghcr.io
+    repository: kubeflow/spark-operator/kubectl
+    tag: ""
+
+controller:
+  replicas: 1
+  revisionHistoryLimit: 10
+  leaderElection:
+    enable: true
+    leaseDuration: 15s
+    renewDeadline: 10s
+    retryPeriod: 2s
+  workers: 10
+  logLevel: info
+  logEncoder: console
+  driverPodCreationGracePeriod: 10s
+  maxTrackedExecutorPerApp: 1000
+  uiService:
+    enable: true
+  uiIngress:
+    enable: false
+    urlFormat: ""
+    ingressClassName: ""
+    tls: []
+    annotations: {}
+  batchScheduler:
+    enable: false
+    kubeSchedulerNames: []
+    default: ""
+  serviceAccount:
+    create: true
+    name: ""
+    annotations: {}
+    automountServiceAccountToken: true
+  rbac:
+    create: true
+    annotations: {}
+  labels: {}
+  annotations: {}
+  volumes:
+  - name: tmp
+    emptyDir:
+      sizeLimit: 1Gi
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  priorityClassName: ""
+  podSecurityContext:
+    fsGroup: 185
+  topologySpreadConstraints: []
+  env: []
+  envFrom: []
+  volumeMounts:
+  - name: tmp
+    mountPath: "/tmp"
+    readOnly: false
+  resources: {}
+  securityContext:
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+  sidecars: []
+  podDisruptionBudget:
+    enable: false
+    minAvailable: 1
+  pprof:
+    enable: false
+    port: 6060
+    portName: pprof
+  workqueueRateLimiter:
+    bucketQPS: 50
+    bucketSize: 500
+    maxDelay:
+      enable: true
+      duration: 6h
+
+webhook:
+  enable: true
+  replicas: 1
+  revisionHistoryLimit: 10
+  leaderElection:
+    enable: true
+  logLevel: info
+  logEncoder: console
+  port: 9443
+  portName: webhook
+  failurePolicy: Fail
+  timeoutSeconds: 10
+  resourceQuotaEnforcement:
+    enable: false
+  serviceAccount:
+    create: true
+    name: ""
+    annotations: {}
+    automountServiceAccountToken: true
+  rbac:
+    create: true
+    annotations: {}
+  labels: {}
+  annotations: {}
+  sidecars: []
+  volumes:
+  - name: serving-certs
+    emptyDir:
+      sizeLimit: 500Mi
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  priorityClassName: ""
+  podSecurityContext:
+    fsGroup: 185
+  topologySpreadConstraints: []
+  env: []
+  envFrom: []
+  volumeMounts:
+  - name: serving-certs
+    mountPath: /etc/k8s-webhook-server/serving-certs
+    subPath: serving-certs
+    readOnly: false
+  resources: {}
+  securityContext:
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+  podDisruptionBudget:
+    enable: false
+    minAvailable: 1
+
+spark:
+  jobNamespaces:
+  - spark
+  serviceAccount:
+    create: true
+    name: "spark-submit"
+    annotations: {}
+    automountServiceAccountToken: true
+  rbac:
+    create: true
+    annotations: {}
+
+prometheus:
+  metrics:
+    enable: true
+    port: 8080
+    portName: metrics
+    endpoint: /metrics
+    prefix: ""
+    jobStartLatencyBuckets: "30,60,90,120,150,180,210,240,270,300"
+  podMonitor:
+    create: false
+    labels: {}
+    jobLabel: spark-operator-podmonitor
+    podMetricsEndpoint:
+      scheme: http
+      interval: 5s
+
+certManager:
+  enable: false
+  issuerRef: {}
+  duration: ""
+  renewBefore: ""
