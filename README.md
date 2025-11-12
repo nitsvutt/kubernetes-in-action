@@ -81,12 +81,8 @@ helm get values spark-operator -n spark --all
 ``` -->
 ```
 helm install spark-history-server stable/spark-history-server \
+    -f $PROJECT_PATH/kubernetes-in-action/charts/spark-history-server/values.yaml \
     --namespace spark \
-    --set service.type=NodePort \
-    --set service.nodePort=30080 \
-    --set nfs.enableExampleNFS=false \
-    --set pvc.enablePVC=true \
-    --set pvc.existingClaimName=spark-event-pvc \
     --wait
 ```
 <!-- ```

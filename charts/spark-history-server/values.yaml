@@ -1,0 +1,87 @@
+replicaCount: 1
+nameOverride: ""
+fullnameOverride: ""
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name:
+
+image:
+  repository: lightbend/spark-history-server
+  tag: 2.4.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  nodePort: 30080
+  port:
+    number: 18080
+    name: spark-history-server-nodeport
+  annotations: {}
+
+environment:
+
+podAnnotations: {}
+
+resources: {}
+
+ingress:
+  enabled: false
+  annotations: {}
+  path: /
+  hosts:
+    - spark-history-server.example.com
+  tls: []
+
+pvc:
+  enablePVC: true
+  existingClaimName: spark-event-pvc
+  eventsDir: "/"
+
+nfs:
+  enableExampleNFS: false
+  pvName: nfs-pv
+  pvcName: nfs-pvc
+
+gcs:
+  enableGCS: false
+  enableIAM: false
+  secret: history-secrets
+  key: sparkonk8s.json
+  logDirectory: gs://spark-hs/
+
+hdfs:
+  hdfsSiteConfigMap: hdfs-site
+  coreSiteConfigMap: core-site
+  logDirectory: hdfs://hdfs/history/
+  HADOOP_CONF_DIR: /etc/hadoop
+
+s3:
+  enableS3: false
+  enableIAM: true
+  secret: aws-secrets
+  accessKeyName: aws-access-key
+  secretKeyName: aws-secret-key
+  logDirectory: s3a://spark-hs/
+  endpoint: default
+
+wasbs:
+  enableWASBS: false
+  sasKeyMode: true
+  secret: azure-secrets
+  sasKeyName: azure-blob-sas-key
+  storageAccountKeyName: azure-storage-account-key
+  storageAccountNameKeyName: azure-storage-account-name
+  containerKeyName: azure-blob-container-name
+  logDirectory: wasbs:///spark-hs
+
+imagePullSecrets: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
