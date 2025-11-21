@@ -3,8 +3,9 @@
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Set up devlopment environment](#set-up-dev-env)
-3. [Spark on Kubernetes](#spark-on-k8s)
-3. [ScyllaDB on Kubernetes](#scylladb-on-k8s)
+3. [Flink on Kubernetes](#flink-on-k8s)
+4. [Spark on Kubernetes](#spark-on-k8s)
+5. [ScyllaDB on Kubernetes](#scylladb-on-k8s)
 
 <div id="introduction"/>
 
@@ -43,9 +44,56 @@ docker network connect lakehouse_platform my-cluster-control-plane
 docker network connect lakehouse_platform my-cluster-worker
 ```
 
+<div id="flink-on-k8s"/>
+
+## 3. Flink on Kubernetes
+
+- Create `flink` namespace:
+```
+kubectl create namespace flink
+```
+
+- Add repository for `flink-kubernetes-operator`:
+```
+helm repo add --force-update flink-operator-repo https://archive.apache.org/dist/flink/flink-kubernetes-operator-1.13.0/
+```
+
+- Install the certificate manager:
+```
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.18.2/cert-manager.yaml
+```
+
+- Install `flink-kubernetes-operator` chart:
+```
+helm install flink-kubernetes-operator flink-operator-repo/flink-kubernetes-operator \
+    -f $PROJECT_PATH/kubernetes-in-action/charts/flink-kubernetes-operator/values.yaml \
+    --namespace flink \
+    --wait
+```
+
+- Run a flink deployment:
+```
+kubectl apply -f $PROJECT_PATH/kubernetes-in-action/flink/basic-example.yml
+```
+
+- Check `basic-example` flink deployment:
+```
+kubectl describe flinkdeployment/basic-example -n flink
+```
+
+- Forward port for deployment UI:
+```
+kubectl port-forward service/basic-example-rest 8081:8081 -n flink
+```
+
+- Check `basic-example` UI at `http://localhost:8081/`:
+<p align="center">
+    <img src="https://github.com/nitsvutt/kubernetes-in-action/blob/main/asset/flink-deployment-ui.png" title="Flink Deployment UI" alt="flink-deployment-ui" width=100%/>
+</p>
+
 <div id="spark-on-k8s"/>
 
-## 3. Spark on Kubernetes
+## 4. Spark on Kubernetes
 
 - Create `spark` namespace:
 ```
@@ -92,7 +140,7 @@ kubectl apply -f $PROJECT_PATH/kubernetes-in-action/spark/spark-pi.yml
 
 - Check `spark-pi` application:
 ```
-kubectl describe sparkapp spark-pi -n spark
+kubectl describe sparkapp/spark-pi -n spark
 ```
 
 - Check Spark History Server UI at `http://localhost:18080/`:
@@ -102,7 +150,7 @@ kubectl describe sparkapp spark-pi -n spark
 
 <div id="scylladb-on-k8s"/>
 
-## 4. ScyllaDB on K8s
+## 5. ScyllaDB on K8s
 
 - Create `scylla` namespace:
 ```
